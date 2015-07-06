@@ -33,5 +33,15 @@ class MY_Controller extends CI_Controller {
             redirect(base_url('index.php'));
         }
     }
+    
+    public function lihatfile() {
+        $id = $_POST['idtag'];
+        $result = $this->tagihanmodel->getSpecificTagihan($id);
+        if (is_file('uploads/' . $result['file_tagihan'])) {
+            redirect(base_url('uploads/' . $result['file_tagihan']));
+        } else {
+            show_404();
+        }
+    }
 
 }

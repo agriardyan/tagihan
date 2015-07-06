@@ -7,11 +7,11 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Lihat Detail Tagihan - Manager Bidang</title>
+        <title>Verifikasi Tagihan-SubBid</title>
     </head>
     <body>
         <?php $this->load->view('headloader'); ?>
-        <?php $this->load->view('general_manager/menubar-gm'); ?>
+        <?php $this->load->view('subbid_umum/menubar-subbid-umum'); ?>
 
         <div class="ui one column page grid">
             <div class="column">
@@ -26,7 +26,7 @@ and open the template in the editor.
                                     <input name="namavendor" type="hidden" value="<?php echo @$specifictagihan['id_vendor']; ?>" >
                                 </div>
                                 <div class="field">
-                                    <form target="_blank" action="<?php echo base_url('gm/lihatfile') ?>" method="POST">
+                                    <form target="_blank" action="<?php echo base_url('subbidumum/lihatfile') ?>" method="POST">
                                         <input type="hidden" name="idtag" value="<?php echo @$specifictagihan['id_tagihan']; ?>">
                                         <input class="ui blue submit button" type="submit" value="LIHAT FILE">
                                     </form>
@@ -58,43 +58,64 @@ and open the template in the editor.
                                     <h3><?php echo @$specifictagihan['direksi']; ?></h3>
                                 </div>
                                 <div class="field">
-                                    <label>Lihat Berkas</label>
-                                    <div class="ui button" id="lihatberkas" name="lihatberkas" >Klik untuk Lihat Berkas</div>
+                                    <label>Tanggal Masuk</label>
+                                    <h3><?php echo @$specifictagihan['tanggal_masuk_agenda']; ?></h3>
+                                </div>                                
+                            </div>
+                            <div class="two fields">
+                                <div class="field">
+                                </div>
+                                <div class="field">
+                                    <label>Keterangan dari Manajer Bidang</label>
+                                    <div class="ui segment"><p><?php echo @$specifictagihan['keterangan']; ?></p></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <?php echo form_open(base_url('subbidumum/performverifikasi'), array('id' => 'registrasiForm')); ?>
+                <div class="ui fluid form segment">
+                    <h4 class="ui    dividing header">Kelengkapan Berkas</h4>
+                    <div class="ui blue segment">
+                        <?php foreach ($allkomponenberkas as $res) :
+                            $stat = false;
+                        ?>
 
-                <?php echo form_open(base_url('gm/teruskan')); ?>
-                <input type="hidden" name="hidden_idtagihan" value="<?php echo @$specifictagihan['id_tagihan']; ?>">
-                <input class="ui blue submit button" type="submit" name="commit" value="TERUSKAN">
-                <?php echo form_close(); ?>
-            </div>
-        </div>
+                        <div class="grouped inline fields">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                <?php
+                                    foreach ($checklisttagihan as $check) :
+                                    if ($res['id_komponenberkas'] == $check['id_komponenberkas']) {
+                                        $stat = true;
+                                    }
+                                    endforeach;
+                                ?>
 
-        <div class="ui modal" id="modalberkas">
-            <i class="close icon"></i>
-            <div class="header">
-                Kelengkapan Berkas
-            </div>
-            <div class="content">
-                <div class="description">
-                    <div class="ui header">Berikut ini berkas yang disertakan oleh vendor ini.</div>
-                    <ol>
-                        <?php foreach ($checklisttagihan as $res) : ?>
-                            <li><?php echo $res['nama_komponenberkas']; ?></li>
-                            <br>
+                                <?php if ($stat === TRUE) : ?>
+                                    <input name="syarat<?php echo $res['id_komponenberkas'] ?>" type="checkbox" checked="true" value="<?php echo $res['id_komponenberkas'] ?>">
+                                    <label><?php echo $res['nama_komponenberkas'] ?></label>
+                                <?php  else : ?>
+                                    <input name="syarat<?php echo $res['id_komponenberkas'] ?>" type="checkbox" value="<?php echo $res['id_komponenberkas'] ?>">
+                                    <label><?php echo $res['nama_komponenberkas'] ?></label>
+                                <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
                         <?php endforeach; ?>
-                    </ol>
+
+                    </div>
+                    
+                    <input type="hidden" name="hidden_idtagihan" value="<?php echo @$specifictagihan['id_tagihan']; ?>">
+                    <input class="ui blue submit button" type="submit" name="commit" value="VERIFIKASI">
                 </div>
+        
+                <?php echo form_close(); ?>
+                
             </div>
-            <div class="actions">
-                <div class="ui positive right labeled icon button">
-                    Tutup
-                    <i class="checkmark icon"></i>
-                </div>
-            </div>
+            
         </div>
 
         <script type="text/javascript">
@@ -107,9 +128,6 @@ and open the template in the editor.
 
                 $('.ui.dropdown').dropdown({on: 'click'});
 
-                $('#lihatberkas').on('click', function () {
-                    $('#modalberkas').modal('show');
-                });
 
                 //Update Form error prompt
                 $("#registrasiForm").form({
@@ -120,6 +138,6 @@ and open the template in the editor.
                         });
             });
         </script>
-        
+
     </body>
 </html>

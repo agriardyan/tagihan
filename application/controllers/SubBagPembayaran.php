@@ -35,7 +35,7 @@ class SubBagPembayaran extends MY_Controller {
     }
 
     public function pembayaran() {
-        $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaruSubbagPembayaran(10, $_SESSION['iduser']);
+        $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaru(10, $_SESSION['iduser']);
         $this->load->view('subbag_pembayaran/lihatdaftarpembayaranbaru-subbag-pembayaran', $data);
     }
 
@@ -43,7 +43,7 @@ class SubBagPembayaran extends MY_Controller {
         $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
         if ($this->form_validation->run() === FALSE) {
-            redirect(base_url('manbid/baru'));
+            redirect(base_url('subbagpembayaran/baru'));
         } else {
             $idtagihan = $_POST['hidden_idtagihan'];
             $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
@@ -51,20 +51,18 @@ class SubBagPembayaran extends MY_Controller {
             $this->load->view('subbag_pembayaran/lihatdetailtagihan-subbag-pembayaran', $data);
         }
     }
+    
+    public function detailpembayaran() {
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
-    public function lihatfile() {
-        $id = $_POST['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        redirect(base_url('uploads/' . $result['file_tagihan']));
-    }
-
-    public function lihatdetailpembayaran() {
-        $id = $_GET['idtag'];
-        $result1 = $this->tagihanmodel->getSpecificTagihan($id);
-        $data['specifictagihan'] = $result1;
-        $result2 = $this->tagihanmodel->getChecklistTagihan($id);
-        $data['checklisttagihan'] = $result2;
-        $this->load->view('subbag_pembayaran/lihatdetailpembayaran-subbag-pembayaran', $data);
+        if ($this->form_validation->run() === FALSE) {
+            redirect(base_url('subbagpembayaran/baru'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
+            $data['checklisttagihan'] = $this->checklistvendormodel->getChecklistVendor($idtagihan);
+            $this->load->view('subbag_pembayaran/lihatdetailpembayaran-subbag-pembayaran', $data);
+        }
     }
 
     public function teruskan() {
@@ -79,13 +77,18 @@ class SubBagPembayaran extends MY_Controller {
             $this->load->view('subbag_pembayaran/berhasilteruskan-subbag-pembayaran');
         }
     }
+    
+    public function lapor() {
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
-    public function pembayaranselesai() {
-        $data = $_POST;
-        $idtagihan = $data['idtagihan'];
-        $this->tagihanmodel->updateFaseTagihan($idtagihan, 11, '');
-        $this->historytagihanmodel->insertHistory($idtagihan, 10, $_SESSION['iduser']);
-        $this->load->view('subbag_pembayaran/berhasilselesai-subbag-pembayaran');
+        if ($this->form_validation->run() === FALSE) {
+            redirect(base_url('subbagpembayaran'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $this->tagihanmodel->updateFaseTagihan($idtagihan, 11, '');
+            $this->historytagihanmodel->insertHistory($idtagihan, 10, $_SESSION['iduser']);
+            $this->load->view('subbag_pembayaran/berhasilselesai-subbag-pembayaran');
+        }
     }
 
 }

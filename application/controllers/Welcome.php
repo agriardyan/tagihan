@@ -21,6 +21,7 @@ class Welcome extends CI_Controller {
      */
     public function index() {
         $this->load->view('upjb/login-upjb');
+//        $this->load->view('testsite');
     }
 
 }

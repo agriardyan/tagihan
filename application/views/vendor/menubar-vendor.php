@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <div class="ui menu">
     <a class="item" id="sche" href="<?php echo base_url('vendor'); ?>">
-        <i class="upload disk icon"></i> HOME
+        <i class="home icon"></i> HOME
     </a>
     <a class="item" id="sche" href="<?php echo base_url('vendor/kontrak'); ?>">
         <i class="upload disk icon"></i> UPLOAD BERKAS PENAGIHAN

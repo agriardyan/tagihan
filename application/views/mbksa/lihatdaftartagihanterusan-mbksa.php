@@ -13,47 +13,59 @@ and open the template in the editor.
         <?php $this->load->view('headloader'); ?>
         <?php $this->load->view('mbksa/menubar-mbksa'); ?>
 
-        <div class="ui two center aligned column grid">
-            <div class="column">
-                <h3 class="ui blue inverted center aligned top attached header">TAGIHAN BARU</h3>
-                <div class="ui form stacked segment"> 
-                    <?php
-                        foreach ($dbresult as $res) {
-                    ?>
+        <div class="ui form segment">
+            <h4 class="ui dividing header">Daftar Tagihan diajukan oleh Vendor</h4>
+
+                <table class="ui celled definition table">
+                    <thead>
+                        <tr>
+                            <th>Nomor Tagihan</th>
+                            <th>Nomor Kontrak</th>
+                            <th>Vendor</th>
+                            <th>Nama Pekerjaan</th>
+                            <th>Direksi</th>
+                            <th>Nilai Kontrak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         
-                    <a href = "<?php echo base_url('mbksa/lihatdetailterusan?idtag='.$res['id_tagihan']); ?>">
-                        <div class = "ui blue segment">
-                        <div class = "ui three column divided grid">
-                        <div class = "center aligned column">
-                        <p><?php echo $res['nomor_tagihan']; ?></p>
-                        </div>
-                        <div class = "center aligned column">
-                        <p><?php echo $res['nama_vendor']; ?></p>
-                        </div>
-                        <div class = "center aligned column">
-                        <p><?php echo $res['nama_pekerjaan']; ?></p>
-                        </div>
-                        </div>
-                        </div>
-                        </a>
-                    
-                    <?php
+                            <?php foreach ($dbresult as $key => $value) : ?>
+                            <tr>
+                                <td>
+                                    <i class="folder icon"></i> <?php echo $value['nomor_tagihan']; ?>
+                                </td>
+                                <td><?php echo $value['nomor_kontrak']; ?></td>
+                                <td><?php echo $value['id_vendor']; ?></td>
+                                <td><?php echo $value['nama_pekerjaan']; ?></td>
+                                <td><?php echo $value['direksi']; ?></td>
+                                <td>Rp <?php echo number_format($value['nilai'], 2, ',', '.'); ?></td>
+                                <td class="center aligned">
+                                    <?php
+                                    echo form_open(base_url('mbksa/detaildisposisi'));
+                                    echo form_hidden('hidden_idtagihan', $value['id_tagihan']);
+                                    ?>
+                                    <input type="submit" class="ui blue submit button" value="DETAIL"/>
+                                    <?php echo form_close(); ?>
+                                </td>
+                            </tr>    
+                            <?php endforeach; ?>
                         
-                    };
-                    ?>
-                </div>
-            </div>
+                    </tbody>
+                </table>
         </div>
         
         <script type="text/javascript">
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $(document.getElementById("reg")).addClass("active");
 
                 var originalState = $('#registrasiForm').clone();
 
                 $('#registrasiForm').replaceWith(originalState);
+
                 $('.ui.dropdown').dropdown({on: 'click'});
+                
             });
         </script>
+        
     </body>
 </html>

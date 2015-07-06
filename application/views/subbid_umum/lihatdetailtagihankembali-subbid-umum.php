@@ -75,20 +75,22 @@ and open the template in the editor.
                     <div class="grouped inline fields">
                         <div class="ui fluid form segment">
                             <div class="field">
-                                <h4 class="ui dividing header">Dokumen tersebut dikembalikan karena ketidaklengkapan berkas : </h4>
+                                <h4 class="ui dividing header">Dokumen tersebut dikembalikan karena kesalahan/ketidaklengkapan sbb : </h4>
                                 <?php echo @$specifictagihan['keterangan']; ?> 
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php 
-                echo form_open(base_url('subbidumum/kembalikan'), array('id' => 'registrasiForm')); 
-                echo form_hidden('hidden_idtagihan', @$specifictagihan['id_tagihan']);
+                echo form_open(base_url('subbidumum/kembalivendor'), array('id' => 'registrasiForm')); 
                 ?>
                 <div class="ui fluid form segment">
                     <input class="ui blue submit button" name="commit" value="KEMBALI KE VENDOR">
                 </div>
-                <?php echo form_close(); ?>
+                <?php 
+                echo form_hidden('hidden_idtagihan', @$specifictagihan['id_tagihan']);
+                echo form_close(); 
+                ?>
             </div>
         </div>
 

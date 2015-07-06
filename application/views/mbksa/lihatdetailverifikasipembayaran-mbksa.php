@@ -15,7 +15,7 @@ and open the template in the editor.
 
         <div class="ui one column page grid">
             <div class="column">
-                <h4 class="ui top center aligned attached inverted blue block header">DETAIL DOKUMEN TAGIHAN</h4>
+                <h4 class="ui top center aligned attached inverted blue block header">DETAIL DOKUMEN PEMBAYARAN</h4>
                 <div class="ui fluid form segment">
                     <div class="ui one column grid">
                         <div class="column">

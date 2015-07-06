@@ -7,16 +7,16 @@
  */
 
 /**
- * Description of ManBid
+ * Description of GM
  *
  * @author root
  */
-class ManBid extends MY_Controller {
+class GM extends MY_Controller {
 
     //put your code here
     public function __construct() {
         parent::__construct();
-        if ($this->session->userdata('role') != 3) {
+        if ($this->session->userdata('role') != 8) {
             show_404();
         } else {
             $this->load->model('usermodel');
@@ -27,50 +27,37 @@ class ManBid extends MY_Controller {
     }
 
     public function index() {
-        $this->load->view('mb/home-mb');
+        $this->load->view('general_manager/home-gm');
     }
 
     public function baru() {
-        $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaru(3, $_SESSION['iduser']);
-        $this->load->view('mb/lihatdaftartagihanbaru-mb', $data);
+        $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaru(9, $_SESSION['iduser']);
+        $this->load->view('general_manager/lihatdaftartagihanbaru-gm', $data);
     }
 
     public function detail() {
         $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
         if ($this->form_validation->run() === FALSE) {
-            redirect(base_url('manbid/baru'));
+            redirect(base_url('mbksa'));
         } else {
             $idtagihan = $_POST['hidden_idtagihan'];
             $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
             $data['checklisttagihan'] = $this->checklistvendormodel->getChecklistVendor($idtagihan);
-            $this->load->view('mb/lihatdetailtagihan-mb', $data);
+            $this->load->view('general_manager/lihatdetailtagihan-gm', $data);
         }
     }
 
-    public function lihatfile() {
-        $id = $_POST['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        redirect(base_url('uploads/' . $result['file_tagihan']));
-    }
-
     public function teruskan() {
-
         $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
-        $this->form_validation->set_rules('hidden_direksi', '', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            redirect(base_url('manbid'));
+            redirect(base_url('mbksa'));
         } else {
             $idtagihan = $_POST['hidden_idtagihan'];
-            $direksi = $_POST['hidden_direksi'];
-            $keterangan = trim($_POST['keterangan']);
-            $keterangan = nl2br($keterangan);
-            $result = $this->usermodel->getManajerByDireksi($direksi);
-            $this->tagihanmodel->updateFaseTagihan($idtagihan, 4, $result['id_user']);
-            $this->tagihanmodel->updateKeterangan($idtagihan, $keterangan);
-            $this->historytagihanmodel->insertHistoryWithKeterangan($idtagihan, 3, $_SESSION['iduser'], $keterangan);
-            $this->load->view('mb/berhasilteruskan-mb');
+            $this->tagihanmodel->updateFaseTagihan($idtagihan, 10, 17);
+            $this->historytagihanmodel->insertHistory($idtagihan, 9, $_SESSION['iduser']);
+            $this->load->view('general_manager/berhasilteruskan-gm');
         }
     }
 

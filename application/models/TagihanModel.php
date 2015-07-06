@@ -24,12 +24,6 @@ class TagihanModel extends CI_Model {
         return $query->result_array();
     }
     
-    public function getAllTagihanSorted() {
-        $sql = 'SELECT t.id_tagihan, t.nomor_tagihan, t.nama_pekerjaan, t.nilai_pekerjaan, v.nama_vendor FROM tagihan t JOIN vendor v ON t.id_vendor = v.id_vendor ORDER BY t.tanggal_masuk DESC';
-        $query = $this->db->query($sql);
-        return $query->result_array();
-    }
-    
     public function getAllTagihanBaru($fase, $iduser) {
 //        $query = $this->db->query('SELECT t.id_tagihan, t.nomor_tagihan, t.nama_pekerjaan, t.nilai_pekerjaan, v.nama_vendor FROM tagihan t JOIN vendor v ON t.id_vendor = v.id_vendor AND t.id_tagihan NOT IN (SELECT id_tagihan FROM agendatagihan)');
         $sql = 'SELECT * FROM t_tagihan t, t_kontrak k, t_pekerjaan p WHERE t.id_kontrak = k.id_kontrak AND k.id_kontrak = p.id_kontrak AND t.fase_aktif = ? AND t.current_user = ?';
@@ -37,15 +31,8 @@ class TagihanModel extends CI_Model {
         return $query->result_array();
     }
     
-    public function getAllTagihanBaruSubbagPembayaran($fase, $iduser) {
-//        $query = $this->db->query('SELECT t.id_tagihan, t.nomor_tagihan, t.nama_pekerjaan, t.nilai_pekerjaan, v.nama_vendor FROM tagihan t, vendor v, agendatagihan a WHERE t.id_vendor = v.id_vendor AND t.id_tagihan = a.id_tagihan AND a.fase = 3');
-        $sql = 'SELECT t.id_tagihan, t.nomor_tagihan, t.nama_pekerjaan, t.nilai_pekerjaan, v.nama_vendor FROM tagihan t, vendor v WHERE t.id_vendor = v.id_vendor AND t.current_user = ? AND t.fase = ?';
-        $query = $this->db->query($sql, array($iduser, $fase));
-        return $query->result_array();
-    }
-    
     public function getAllTagihanKembali($namavendor) {
-        $sql = 'SELECT * FROM t_tagihan t, t_kontrak k, t_pekerjaan p WHERE t.id_kontrak = k.id_kontrak AND k.id_kontrak = p.id_kontrak AND t.fase_aktif = 99 AND k.id_vendor = ?';
+        $sql = 'SELECT * FROM t_tagihan t, t_kontrak k, t_pekerjaan p WHERE t.id_kontrak = k.id_kontrak AND k.id_kontrak = p.id_kontrak AND t.fase_aktif = 99 AND k.id_vendor = ? AND t.revisi = 0';
         $query = $this->db->query($sql, array($namavendor));
         return $query->result_array();
     }
@@ -77,7 +64,7 @@ class TagihanModel extends CI_Model {
         return $newid;
     }
     
-    public function insertTagihanRevisi($nomortagihan, $nilaipekerjaan, $nama, $idvendor, $nomorkontrak, $filetagihan, $previousid) {
+    public function insertTagihanRevisi($nomortagihan, $idkontrak, $filetagihan, $previousid) {
         $sql = 'SELECT sysdate() as time';
         $query = $this->db->query($sql);
         $result = $query->row_array();

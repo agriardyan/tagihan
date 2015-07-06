@@ -40,7 +40,7 @@ and open the template in the editor.
                             <td><?php echo 'Rp ' . number_format($value['nilai'], 2, ',', '.'); ?></td>
                             <td class="center aligned">
                                 <?php
-                                echo form_open(base_url('mbksa/detail'));
+                                echo form_open(base_url('mbksa/detailpembayaran'));
                                 echo form_hidden('hidden_idtagihan', $value['id_tagihan']);
                                 ?>
                                 <input type="submit" class="ui blue submit button" value="DETAIL"/>

@@ -24,6 +24,12 @@ class HistoryTagihanModel extends CI_Model {
         $this->db->set('time', '(SELECT sysdate())', FALSE);
         $this->db->insert('t_historytagihan', $data);
     }
+    
+    public function insertHistoryWithKeterangan($idtagihan, $fase, $iduser, $keterangan) {
+        $data = array('id_tagihan' => $idtagihan, 'fase' => $fase, 'id_user' => $iduser, 'keterangan' => $keterangan);
+        $this->db->set('time', '(SELECT sysdate())', FALSE);
+        $this->db->insert('t_historytagihan', $data);
+    }
 
     public function getAllData() {
         $sql = 'SELECT f.keterangan, u.nama_user FROM historytagihan h, fase f, user u WHERE h.fase = f.id_fase AND h.id_user = u.id_user';

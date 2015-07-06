@@ -41,7 +41,7 @@ class MBKSA extends MY_Controller {
         $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaru(3, $_SESSION['iduser']);
         $this->load->view('mbksa/lihatdaftartagihanterusan-mbksa', $data);
     }
-    
+
     public function pembayaran() {
         $data['dbresult'] = $this->tagihanmodel->getAllTagihanBaru(8, $_SESSION['iduser']);
         $this->load->view('mbksa/lihatdaftarverifikasipembayaran-mbksa', $data);
@@ -60,6 +60,19 @@ class MBKSA extends MY_Controller {
         }
     }
     
+    public function detaildisposisi() {
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
+
+        if ($this->form_validation->run() === FALSE) {
+            redirect(base_url('mbksa'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
+            $data['checklisttagihan'] = $this->checklistvendormodel->getChecklistVendor($idtagihan);
+            $this->load->view('mbksa/lihatdetailtagihanterusan-mbksa', $data);
+        }
+    }
+
     public function detailpembayaran() {
         $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
@@ -83,34 +96,6 @@ class MBKSA extends MY_Controller {
         $result = $this->tagihanmodel->getAllTagihanBaruManbid(8, $_SESSION['iduser']);
         $data['dbresult'] = $result;
         $this->load->view('mbksa/lihatdaftarverifikasipembayaran-mbksa', $data);
-    }
-
-    public function lihatfile() {
-        $id = $_POST['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        if (is_file('uploads/' . $result['file_tagihan'])) {
-            redirect(base_url('uploads/' . $result['file_tagihan']));
-        } else {
-            redirect(base_url('mbksa'));
-        }
-    }
-
-    public function lihatdetailterusan() {
-        $id = $_GET['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        $data['specifictagihan'] = $result;
-        $result = $this->tagihanmodel->getChecklistTagihan($id);
-        $data['checklisttagihan'] = $result;
-        $this->load->view('mbksa/lihatdetailtagihanterusan-mbksa', $data);
-    }
-
-    public function lihatdetailverifikasi() {
-        $id = $_GET['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        $data['specifictagihan'] = $result;
-        $result = $this->tagihanmodel->getChecklistTagihan($id);
-        $data['checklisttagihan'] = $result;
-        $this->load->view('mbksa/lihatdetailverifikasipembayaran-mbksa', $data);
     }
 
     public function detailmonitoring() {
@@ -143,15 +128,38 @@ class MBKSA extends MY_Controller {
             $this->load->view('mbksa/berhasilteruskan-mbksa');
         }
     }
+    
+    public function teruskandisposisi() {
+
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
+        $this->form_validation->set_rules('hidden_direksi', '', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            redirect(base_url('mbksa'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $direksi = $_POST['hidden_direksi'];
+            $keterangan = trim($_POST['keterangan']);
+            $keterangan = nl2br($keterangan);
+            $result = $this->usermodel->getManajerByDireksi($direksi);
+            $this->tagihanmodel->updateFaseTagihan($idtagihan, 4, $result['id_user']);
+            $this->tagihanmodel->updateKeterangan($idtagihan, $keterangan);
+            $this->historytagihanmodel->insertHistoryWithKeterangan($idtagihan, 3, $_SESSION['iduser'], $keterangan);
+            $this->load->view('mbksa/berhasilteruskan-mbksa');
+        }
+    }
 
     public function verifikasi() {
-        $data = $_POST;
-        $idtagihan = $data['idtagihan'];
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
-//        $this->agendatagihanmodel->insertagenda($idtag);
-        $this->tagihanmodel->updateFaseTagihan($idtagihan, 9, 19);
-        $this->historytagihanmodel->insertHistory($idtagihan, 8, $_SESSION['iduser']);
-        $this->load->view('mbksa/berhasilteruskan-mbksa');
+        if ($this->form_validation->run() == FALSE) {
+            redirect(base_url('mbksa/pembayaran'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $this->tagihanmodel->updateFaseTagihan($idtagihan, 9, 19);
+            $this->historytagihanmodel->insertHistory($idtagihan, 8, $_SESSION['iduser']);
+            $this->load->view('mbksa/berhasilteruskan-mbksa');
+        }
     }
 
 }

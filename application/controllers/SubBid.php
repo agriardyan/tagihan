@@ -49,21 +49,19 @@ class SubBid extends MY_Controller {
             $this->load->view('subbid/verifikasitagihan-subbid', $data);
         }
     }
+    
+    public function fkembali() {
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
 
-    public function lihatfile() {
-        $id = $_POST['idtag'];
-        $result = $this->tagihanmodel->getSpecificTagihan($id);
-        redirect(base_url('uploads/' . $result['file_tagihan']));
-    }
-
-    public function carivendor() {
-        $kodevendor = $_POST['carivendor'];
-        $result = $this->vendormodel->getSpecificVendor($kodevendor);
-        $data['nama_vendor'] = $result['nama_vendor'];
-        $data['id_vendor'] = $result['id_vendor'];
-        $data['display1'] = 'none';
-        $data['display2'] = '';
-        $this->load->view('subbid_umum/agendatagihan-subbid-umum', $data);
+        if ($this->form_validation->run() === FALSE) {
+            redirect(base_url('subbid/baru'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
+            $data['checklisttagihan'] = $this->checklistvendormodel->getChecklistVendor($idtagihan);
+            $data['allkomponenberkas'] = $this->komponenberkasmodel->getAllKomponenBerkas();
+            $this->load->view('subbid/alasankembali-subbid', $data);
+        }
     }
 
     public function performverifikasi() {
@@ -126,11 +124,14 @@ class SubBid extends MY_Controller {
         } else {
             $data = $_POST;
             $idtagihan = $data['hidden_idtagihan'];
-            $keterangan = $data['keterangan1'];
-            $keterangan .= '<br>Pesan : <br>' . nl2br(trim($data['keterangan'])) . '<br>';
+            $keterangan = '';
+            if(isset($data['keterangan1'])) {
+                $keterangan = $data['keterangan1'];
+            }
+            $keterangan .= '<br>Pesan dari '. $_SESSION['namauser'] .' : <br>' . nl2br(trim($data['keterangan'])) . '<br>';
             $this->tagihanmodel->updateFaseTagihan($idtagihan, 88, 2);
             $this->tagihanmodel->updateKeterangan($idtagihan, $keterangan);
-            $this->historytagihanmodel->insertHistory($idtagihan, 4, $_SESSION['iduser']);
+            $this->historytagihanmodel->insertHistoryWithKeterangan($idtagihan, 4, $_SESSION['iduser'], $keterangan);
             $this->load->view('subbid/berhasilteruskan-subbid');
         }
     }

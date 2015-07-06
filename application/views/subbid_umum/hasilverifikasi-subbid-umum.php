@@ -14,7 +14,7 @@ and open the template in the editor.
         // put your code here
         ?>
         <?php $this->load->view('headloader'); ?>
-        <?php $this->load->view('subbid/menubar-subbid'); ?>
+        <?php $this->load->view('subbid_umum/menubar-subbid-umum'); ?>
 
         <div class="ui one column page grid">
             <div class="column">
@@ -94,7 +94,7 @@ and open the template in the editor.
                         
                         <div class="ui two column page grid">
                             <div class="left floated left aligned column">
-                                <?php echo form_open(base_url('subbid/fkembali')); ?>
+                                <?php echo form_open(base_url('subbidumum/fkembali')); ?>
                                 <input class="ui red submit button" name="commit" type="submit" value="KEMBALI">
                                 <?php 
                                 echo form_hidden('hidden_idtagihan', $idtagihan);
@@ -102,7 +102,7 @@ and open the template in the editor.
                                 ?>
                             </div>
                             <div class="right floated right aligned column">
-                                <?php echo form_open(base_url('subbid/teruskan')); ?>
+                                <?php echo form_open(base_url('subbidumum/teruskan')); ?>
                                 <input class="ui blue submit button" name="commit" type="submit" value="TERUSKAN">
                                 <?php 
                                 echo form_hidden('hidden_idtagihan', $idtagihan);
@@ -115,7 +115,7 @@ and open the template in the editor.
                 <?php 
                 
                 else : 
-                    echo form_open(base_url('subbid/kembalikan'));
+                    echo form_open(base_url('subbidumum/kembalikan'));
                 ?>
                     <div class="ui fluid form segment">
 

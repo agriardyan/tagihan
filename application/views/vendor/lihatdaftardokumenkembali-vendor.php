@@ -28,8 +28,9 @@ and open the template in the editor.
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    
                         <?php foreach ($dbresult as $key => $value) : ?>
+                        <tr>
                             <td>
                                 <i class="folder icon"></i> <?php echo $value['nomor_tagihan']; ?>
                             </td>
@@ -46,8 +47,9 @@ and open the template in the editor.
                                 <input type="submit" class="ui blue submit button" value="DETAIL"/>
                                 <?php echo form_close(); ?>
                             </td>
+                        </tr>
                         <?php endforeach; ?>
-                    </tr>
+                    
                 </tbody>
             </table>
         </div>

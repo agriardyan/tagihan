@@ -22,7 +22,7 @@ and open the template in the editor.
                 <i class="user icon"></i> TAGIHAN <i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" href="<?php echo base_url('subbidumum/baru'); ?>"><i class="dollar icon"></i>Agendakan Tagihan Baru dari Vendor</a>
-                    <a class="item" href="<?php echo base_url('subbidumum/tagihanbaru'); ?>"><i class="dollar icon"></i>Tagihan Baru Disposisi Manajer Bidang</a>
+                    <a class="item" href="<?php echo base_url('subbidumum/masuk'); ?>"><i class="dollar icon"></i>Tagihan Baru Disposisi Manajer Bidang</a>
                     <a class="item" id="sche" href="<?php echo base_url('subbidumum/kembali') ?>"><i class="book icon"></i>Tagihan Kembali</a>
                 </div>
             </div>

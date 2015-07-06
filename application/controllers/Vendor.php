@@ -50,14 +50,6 @@ class Vendor extends MY_Controller {
         }
     }
 
-    public function uploaddokumen() {
-        $result = $this->komponenberkasmodel->getAllKomponenBerkas();
-        $data['checklist'] = $result;
-        $this->load->view('vendor/uploaddokumen-vendor');
-//        $data['kontrakarray'] = $this->kontrakmodel->getKontrakforTagihan();
-//        $this->load->view('vendor/lihatdaftarkontrak-vendor', $data);
-    }
-
     public function dokumenkembali() {
         $data['dbresult'] = $this->tagihanmodel->getAllTagihanKembali($_SESSION['namauser']);
         $this->load->view('vendor/lihatdaftardokumenkembali-vendor', $data);
@@ -73,6 +65,19 @@ class Vendor extends MY_Controller {
             $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
             $data['checklisttagihan'] = $this->checklistvendormodel->getChecklistVendor($idtagihan);
             $this->load->view('vendor/lihatdetaildokumenkembali-vendor', $data);
+        }
+    }
+    
+    public function revisi() {
+        $this->form_validation->set_rules('hidden_idtagihan', '', 'required');
+
+        if ($this->form_validation->run() === FALSE) {
+            redirect(base_url('vendor/dokumenkembali'));
+        } else {
+            $idtagihan = $_POST['hidden_idtagihan'];
+            $data['specifictagihan'] = $this->tagihanmodel->getSpecificTagihan($idtagihan);
+            $data['checklist'] = $this->komponenberkasmodel->getAllKomponenBerkas();
+            $this->load->view('vendor/revisidokumen-vendor', $data);
         }
     }
 
@@ -106,7 +111,11 @@ class Vendor extends MY_Controller {
                 $upload_data = $this->upload->data();
 
                 if ($uploadstatus) {
-                    $newIdTagihan = $this->tagihanmodel->insertTagihan($data['nomortagihan'], $data['hidden_idkontrak'], $upload_data['file_name']);
+                    if(isset($data['hidden_idtagihan'])) {
+                        $newIdTagihan = $this->tagihanmodel->insertTagihanRevisi($data['nomortagihan'], $data['hidden_idkontrak'], $upload_data['file_name'], $data['hidden_idtagihan']);
+                    } else {
+                        $newIdTagihan = $this->tagihanmodel->insertTagihan($data['nomortagihan'], $data['hidden_idkontrak'], $upload_data['file_name']);
+                    }
 
                     foreach ($lengkap as $res) {
                         $newIdChecklist = $this->checklistvendormodel->insertChecklist($res, $newIdTagihan);

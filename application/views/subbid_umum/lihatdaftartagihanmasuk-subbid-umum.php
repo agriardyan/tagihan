@@ -11,7 +11,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php $this->load->view('headloader'); ?>
-        <?php $this->load->view('subbid/menubar-subbid'); ?>
+        <?php $this->load->view('subbid_umum/menubar-subbid-umum'); ?>
 
         <div class="ui form segment">
             <h4 class="ui dividing header">Daftar Tagihan diajukan oleh Vendor</h4>
@@ -28,8 +28,8 @@ and open the template in the editor.
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($dbresult as $key => $value) : ?>
-                        <tr>
+                    <tr>
+                        <?php foreach ($dbresult as $key => $value) { ?>
                             <td>
                                 <i class="folder icon"></i> <?php echo $value['nomor_tagihan']; ?>
                             </td>
@@ -40,15 +40,14 @@ and open the template in the editor.
                             <td><?php echo 'Rp ' . number_format($value['nilai'], 2, ',', '.'); ?></td>
                             <td class="center aligned">
                                 <?php
-                                echo form_open(base_url('subbid/detail'));
+                                echo form_open(base_url('subbidumum/detaildisposisi'));
                                 echo form_hidden('hidden_idtagihan', $value['id_tagihan']);
                                 ?>
-                                <input type="submit" class="ui blue submit button" value="VERIFIKASI"/>
+                                <input type="submit" class="ui blue submit button" value="DETAIL"/>
                                 <?php echo form_close(); ?>
                             </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    
+                        <?php } ?>
+                    </tr>
                 </tbody>
             </table>
         </div>

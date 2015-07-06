@@ -75,61 +75,16 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-
-                <?php 
-                if ($success === true) : 
-                        
-                ?>
-                    <div class="ui fluid form segment">
-
-                        <div class="field">
-                            <!--Success Message-->
-                            <div class="ui positive message" id="success">
-                                <div class="header">
-                                    Berkas tagihan lengkap
-                                </div>
-                                <p>Silakan meneruskan berkas tagihan ini ke Sub Bagian Verifikasi</p>
-                            </div>
-                        </div>
-                        
-                        <div class="ui two column page grid">
-                            <div class="left floated left aligned column">
-                                <?php echo form_open(base_url('subbid/fkembali')); ?>
-                                <input class="ui red submit button" name="commit" type="submit" value="KEMBALI">
-                                <?php 
-                                echo form_hidden('hidden_idtagihan', $idtagihan);
-                                echo form_close();
-                                ?>
-                            </div>
-                            <div class="right floated right aligned column">
-                                <?php echo form_open(base_url('subbid/teruskan')); ?>
-                                <input class="ui blue submit button" name="commit" type="submit" value="TERUSKAN">
-                                <?php 
-                                echo form_hidden('hidden_idtagihan', $idtagihan);
-                                echo form_close();
-                                ?>
-                            </div>
-                        </div>
-                        
-                    </div>
-                <?php 
                 
-                else : 
-                    echo form_open(base_url('subbid/kembalikan'));
-                ?>
-                    <div class="ui fluid form segment">
-
+                <div class="ui fluid form segment">
+                    <?php echo form_open(base_url('subbid/kembalikan')); ?>
                         <div class="field">
                             <!--Negative Message-->                        
                             <div class="ui negative message" id="success">
                                 <div class="header">
-                                    Berkas tagihan tidak lengkap
+                                    Alasan Pengembalian
                                 </div>
-                                <p>Silakan mengembalikan berkas tagihan ini ke Sub Bidang Umum</p>
-                                <p>Berkas yang tidak lengkap sebagai berikut : </p>
-                                <div class="description">
-                                    <?php echo $keterangan; ?>
-                                </div>
+                                <p>Silakan mengisi alasan pengembalian dan mengembalikan berkas tagihan ini ke Sub Bidang Umum</p>
                                 <br>
                                 <div class="field" >
                                     <h7 class="ui dividing header">Keterangan Tambahan :</h7>
@@ -140,12 +95,12 @@ and open the template in the editor.
                         </div>
                         <input class="ui blue submit button" type="submit" name="commit" value="KEMBALIKAN">
                     </div>
+
                 <?php 
-                echo form_hidden('hidden_idtagihan', $idtagihan);
-                echo form_hidden('keterangan1', $keterangan);
+                echo form_hidden('hidden_idtagihan', @$specifictagihan['id_tagihan']);
                 echo form_close();
-                endif; 
                 ?>
+                    
             </div>
         </div>
 

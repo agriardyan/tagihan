@@ -94,10 +94,10 @@ and open the template in the editor.
                 <div class="description">
                     <div class="ui header">Berikut ini berkas yang disertakan oleh vendor ini.</div>
                     <ol>
-<?php foreach ($checklisttagihan as $res) : ?>
+                        <?php foreach ($checklisttagihan as $res) : ?>
                             <li><?php echo $res['nama_komponenberkas']; ?></li>
                             <br>
-<?php endforeach; ?>
+                        <?php endforeach; ?>
                     </ol>
                 </div>
             </div>

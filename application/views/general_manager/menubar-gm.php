@@ -15,11 +15,11 @@ and open the template in the editor.
         ?>
         
         <div class="ui menu">
-            <a class="item" id="sche" href="<?php echo base_url('gm/tagihanbaru'); ?>">
-                <i class="book icon"></i> TAGIHAN BARU
+            <a class="item" id="sche" href="<?php echo base_url('gm'); ?>">
+                <i class="home icon"></i> HOME
             </a>
-            <a class="item" id="sche" href="<?php echo base_url('gm/semuatagihan'); ?>">
-                <i class="book icon"></i> SEMUA TAGIHAN
+            <a class="item" id="sche" href="<?php echo base_url('gm/baru'); ?>">
+                <i class="book icon"></i> TAGIHAN BARU
             </a>
             <div class="right menu">
                 <form action="<?php echo base_url('logout'); ?>" method="POST">
